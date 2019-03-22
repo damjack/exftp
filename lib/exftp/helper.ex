@@ -1,6 +1,10 @@
 defmodule Exftp.Helper do
+  require Logger
+  alias Exftp.Error
+
   def to_chlist(s) when is_atom(s), do: s
   def to_chlist(s) when is_integer(s), do: s
+
   def to_chlist(s) when is_bitstring(s) do
     String.to_charlist(s)
   end
@@ -9,7 +13,7 @@ defmodule Exftp.Helper do
     raw
     |> String.split("\n")
     |> Enum.map(&String.trim/1)
-    |> Enum.filter(fn (s) -> (String.length(s) > 0) end)
+    |> Enum.filter(fn s -> String.length(s) > 0 end)
     |> Enum.map(&parse_ls_line/1)
   end
 
@@ -18,16 +22,29 @@ defmodule Exftp.Helper do
     |> Regex.run(line)
     |> parse_ls_line(line)
   end
+
   def parse_ls_line([_all, type, name], _line) do
     %{
       name: name,
-      type: case type do
-              "d" -> :directory
-              _ -> :file
-            end
+      type:
+        case type do
+          "d" -> :directory
+          _ -> :file
+        end
     }
   end
+
   def parse_ls_line(nil, line) do
     raise "failed to parse ftp ls line: #{line}"
+  end
+
+  def handle_error(error) do
+    message =
+      case error do
+        {:error, reason} -> raise %Error{reason: reason}
+        _ -> nil
+      end
+
+    Logger.error("#{inspect(message)}")
   end
 end

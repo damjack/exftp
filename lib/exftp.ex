@@ -2,13 +2,15 @@ defmodule Exftp do
   @moduledoc """
   Functions for transferring and managing files through FTP/SFTP
   """
-  alias Exftp.Helper
-  alias Exftp.Base
-  alias Exftp.Tools
+  alias Exftp.{
+    Helper,
+    Base,
+    Tools
+  }
 
   @default_opts [
     silently_accept_hosts: true,
-    timeout: 1000000000,
+    timeout: 100_000_000,
     port: 21
   ]
 
@@ -21,12 +23,11 @@ defmodule Exftp do
   """
   def connect(host, opts \\ []) do
     opts =
-      Enum.map(opts, fn {k ,v} ->
-          {k, Helper.to_chlist(v)}
-        end)
-    opts =
-      @default_opts
-      |> Keyword.merge(opts)
+      Enum.map(opts, fn {k, v} ->
+        {k, Helper.to_chlist(v)}
+      end)
+      |> Keyword.merge(@default_opts)
+
     Base.open_connection(Helper.to_chlist(host), opts)
   end
 
@@ -38,7 +39,7 @@ defmodule Exftp do
     Opens a file or directory given a connection and remote_path
     Returns {:ok, handle}, or {:error, reason}
   """
-  def open(pid, remote_path) do
+  def open(_pid, _remote_path) do
     # Tools.open(pid, remote_path, :read)
   end
 
@@ -49,6 +50,7 @@ defmodule Exftp do
   def ls(pid) do
     Tools.list_files(pid)
   end
+
   def ls(pid, remote_path) do
     Tools.list_files(pid, remote_path)
   end

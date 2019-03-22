@@ -9,7 +9,8 @@ defmodule Exftp.Error do
 
   defp error_reason_map do
     %{
-      ehost: "Host is not found, FTP server is not found, or connection is rejected by FTP server.",
+      ehost:
+        "Host is not found, FTP server is not found, or connection is rejected by FTP server.",
       eacces: "Error access SFTP server",
       eclosed: "The session is closed.",
       closed: "The session is closed.",
@@ -22,7 +23,7 @@ defmodule Exftp.Error do
       etnospc: "Insufficient storage space in system [452].",
       epnospc: "Exceeded storage allocation (for current directory or dataset) [552].",
       efnamena: "Filename not allowed [553].",
-      enofile: "No such file or directory.",
+      enofile: "No such file or directory."
     }
   end
 end
