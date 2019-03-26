@@ -1,10 +1,10 @@
-defmodule Exftp.Tools do
+defmodule Exftp.Files do
   require Logger
   alias Exftp.Helper
 
   @doc """
-  list files in directory
-  will return an list of %{name: filename, type: :directory|:file}
+    List files in current working directory
+    will return an list of %{name: filename, type: :directory|:file}
   """
   def list_files({:ftp, pid}) do
     case :ftp.ls(pid) do
@@ -17,6 +17,10 @@ defmodule Exftp.Tools do
     raise "ls without path not implemented in sftp"
   end
 
+  @doc """
+    List files in custom remote path
+    will return an list of %{name: filename, type: :directory|:file}
+  """
   def list_files({:ftp, pid}, path) do
     {:ok, listing} = :ftp.ls(pid, Helper.to_chlist(path))
     Helper.parse_ls(listing |> List.to_string())
@@ -42,8 +46,8 @@ defmodule Exftp.Tools do
   end
 
   @doc """
-  retrieve a file
-  will return {:ok, binary} or {:error, reason}
+    Retrieve a file from remote host
+    will return {:ok, binary} or {:error, reason}
   """
   def download({:ftp, pid}, filename) do
     :ftp.type(pid, :binary)
@@ -57,8 +61,8 @@ defmodule Exftp.Tools do
   end
 
   @doc """
-  put a file
-  will return :ok or {:error, reason}
+    Put a file to remote host
+    will return :ok or {:error, reason}
   """
   def upload({:ftp, pid}, path, binary) do
     :ftp.type(pid, :binary)

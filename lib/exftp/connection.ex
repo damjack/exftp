@@ -2,16 +2,26 @@ defmodule Exftp.Connection do
   require Logger
   alias Exftp.Helper
 
-  defp handle_connection([], host, opts) do
-    :inets.start()
+  @spec auth(PID, List.t()) :: {:ftp, PID}
+  def auth(pid, []), do: {:ftp, pid}
 
-    case :inets.start(:ftpc, Keyword.merge(opts, host: host)) do
-      {:ok, pid} -> user(pid, opts)
+  def auth(pid, options) do
+    case :ftp.user(pid, options[:user], options[:password]) do
+      :ok -> {:ftp, pid}
       e -> Helper.handle_error(e)
     end
   end
 
-  defp handle_connection([mode: :sftp], host, opts) do
+  defp handle_open([], host, opts) do
+    :inets.start()
+
+    case :inets.start(:ftpc, Keyword.merge(opts, host: host)) do
+      {:ok, pid} -> auth(pid, opts)
+      e -> Helper.handle_error(e)
+    end
+  end
+
+  defp handle_open([mode: :sftp], host, opts) do
     own_keys = [:port, :mode]
     ssh_opts = opts |> Enum.filter(fn {k, _} -> not (k in own_keys) end)
     :ssh.start()
@@ -26,24 +36,24 @@ defmodule Exftp.Connection do
   Open connection to ftp by passing hostname, user and password.
   Returns the pid that has to be passed to execute commands on that connection
   """
-  def open_connection(host, opts \\ [])
+  def open(host, opts \\ [])
 
-  def open_connection(host, opts) do
+  def open(host, opts) do
     mode_keys = [:mode]
 
     Enum.filter(opts, fn {k, _} -> k in mode_keys end)
-    |> handle_connection(host, opts)
+    |> handle_open(host, opts)
   end
 
   @doc """
   close the connection
   """
-  def close_connection({:sftp, channel, connection}) do
+  def close({:sftp, channel, connection}) do
     :ok = :ssh_sftp.stop_channel(channel)
     :ok = :ssh.close(connection)
   end
 
-  def close_connection({:ftp, pid}) do
+  def close({:ftp, pid}) do
     :inets.stop(:ftpc, pid)
   end
 end

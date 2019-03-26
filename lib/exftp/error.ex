@@ -4,10 +4,11 @@ defmodule Exftp.Error do
 
   def message(%__MODULE__{reason: reason}), do: parse_error_reason(reason)
 
-  def parse_error_reason(reason) when is_atom(reason), do: error_reason_map[reason]
+  def parse_error_reason(reason) when is_atom(reason), do:
+    error_reason_map()[reason]
   def parse_error_reason(reason), do: to_string(reason)
 
-  defp error_reason_map do
+  defp error_reason_map() do
     %{
       ehost:
         "Host is not found, FTP server is not found, or connection is rejected by FTP server.",
