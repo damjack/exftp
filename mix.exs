@@ -9,7 +9,8 @@ defmodule Exftp.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: "A simple FTP/SFTP Elixir library",
-      name: "exftp"
+      name: "exftp",
+      package: package()
     ]
   end
 
