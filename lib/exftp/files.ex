@@ -1,5 +1,8 @@
 defmodule Exftp.Files do
-  require Logger
+  @moduledoc ~S"""
+  Manage files on remote host.
+  """
+
   alias Exftp.Helper
 
   @doc """

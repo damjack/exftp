@@ -1,5 +1,8 @@
 defmodule Exftp.Connection do
-  require Logger
+  @moduledoc ~S"""
+  Open the connection with auth optional params and return a current PID
+  """
+
   alias Exftp.Helper
 
   @spec auth(PID, List.t()) :: {:ftp, PID}

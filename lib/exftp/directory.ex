@@ -1,5 +1,8 @@
 defmodule Exftp.Directory do
-  require Logger
+  @moduledoc ~S"""
+  Manage directory on remote host.
+  """
+
   alias Exftp.Helper
 
   @doc """
@@ -17,7 +20,7 @@ defmodule Exftp.Directory do
   end
 
   @doc """
-  change directory
+  Change directory
   """
   def change_dir({:ftp, pid}, path) do
     :ftp.cd(pid, Helper.to_chlist(path))
@@ -32,7 +35,12 @@ defmodule Exftp.Directory do
   end
 
   @doc """
-  create directory
+  Create directory on remote host
+
+  ## Params
+    * `pid` - valid PID of current connection
+    * `path` - remote absolute path tof new directory
+
   """
   def make_dir({:ftp, pid}, path) do
     :ftp.mkdir(pid, Helper.to_chlist(path))

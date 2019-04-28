@@ -4,8 +4,7 @@ defmodule Exftp.Helper do
 
   def to_chlist(s) when is_atom(s), do: s
   def to_chlist(s) when is_integer(s), do: s
-  def to_chlist(s) when is_bitstring(s), do:
-    String.to_charlist(s)
+  def to_chlist(s) when is_bitstring(s), do: String.to_charlist(s)
 
   def parse_ls(raw) do
     raw
@@ -15,8 +14,7 @@ defmodule Exftp.Helper do
     |> Enum.map(&parse_ls_line/1)
   end
 
-  def parse_ls_line(nil, line), do:
-    raise "failed to parse ftp ls line: #{line}"
+  def parse_ls_line(nil, line), do: raise("failed to parse ftp ls line: #{line}")
 
   def parse_ls_line([_all, type, name], _line) do
     %{

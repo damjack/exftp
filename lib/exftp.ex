@@ -1,6 +1,6 @@
 defmodule Exftp do
   @moduledoc ~S"""
-  Modules manage the FTP or SFTP connection to remote host and manage files.
+  Manage a FTP or SFTP connection to remote host and manage files.
 
   ## Connection
 
@@ -8,20 +8,21 @@ defmodule Exftp do
   If successful, returns a PID. This pid will be passed to the
   authenticate command
 
-    iex> Exftp.connect("ftp.example.net")
-    #PID<0.158.0>
+  ## Examples
+
+      iex> Exftp.connect("ftp.speedtest.net")
+      #PID<0.158.0>
 
   The `connect/2` function accept second parameter with custom data for port,
   username, password and mode.
 
-    iex> Exftp.connect("ftp.example.net", {mode: :sftp})
-    #PID<0.158.0>
+  ## Examples
 
-  ## Manage Directory
-
-  ## Manage Files
+      iex> Exftp.connect("ftp.speedtest.net", {mode: :sftp})
+      #PID<0.158.0>
 
   """
+
   alias Exftp.{
     Helper,
     Connection,
@@ -56,6 +57,12 @@ defmodule Exftp do
 
   @doc """
     Opens a file or directory given a connection and remote_path
+
+    ## Params
+
+      * `pid` - an FTP pid connection
+      * `remote_path` - a string
+
     Returns {:ok, handle}, or {:error, reason}
   """
   def open(_pid, _remote_path) do
