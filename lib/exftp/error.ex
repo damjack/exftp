@@ -4,12 +4,13 @@ defmodule Exftp.Error do
 
   def message(%__MODULE__{reason: reason}), do: parse_error_reason(reason)
 
-  def parse_error_reason(reason) when is_atom(reason), do: error_reason_map[reason]
+  def parse_error_reason(reason) when is_atom(reason), do: error_reason_map()[reason]
   def parse_error_reason(reason), do: to_string(reason)
 
-  defp error_reason_map do
+  defp error_reason_map() do
     %{
-      ehost: "Host is not found, FTP server is not found, or connection is rejected by FTP server.",
+      ehost:
+        "Host is not found, FTP server is not found, or connection is rejected by FTP server.",
       eacces: "Error access SFTP server",
       eclosed: "The session is closed.",
       closed: "The session is closed.",
@@ -22,7 +23,7 @@ defmodule Exftp.Error do
       etnospc: "Insufficient storage space in system [452].",
       epnospc: "Exceeded storage allocation (for current directory or dataset) [552].",
       efnamena: "Filename not allowed [553].",
-      enofile: "No such file or directory.",
+      enofile: "No such file or directory."
     }
   end
 end
