@@ -1,6 +1,6 @@
 defmodule Exftp do
   @moduledoc ~S"""
-  Manage a FTP or SFTP connection to remote host and manage files.
+  Client FTP/SFTP to transferring and managing files through remote server
 
   ## Connection
 
@@ -11,7 +11,12 @@ defmodule Exftp do
   ## Examples
 
       iex> Exftp.connect("ftp.speedtest.net")
-      #PID<0.158.0>
+      {:ftp, #PID<0.215.0>}
+
+  ## Connect through SFTP
+
+      iex> Exftp.connect("sftp.speedtest.net", {mode: :sftp})
+      {:sftp, #PID<0.215.0>}
 
   The `connect/2` function accept second parameter with custom data for port,
   username, password and mode.
@@ -19,7 +24,7 @@ defmodule Exftp do
   ## Examples
 
       iex> Exftp.connect("ftp.speedtest.net", {mode: :sftp})
-      #PID<0.158.0>
+      {:sftp, #PID<0.215.0>}
 
   """
 
@@ -27,7 +32,7 @@ defmodule Exftp do
     Helper,
     Connection,
     Directory,
-    Files
+    File
   }
 
   @default_opts [
@@ -50,6 +55,12 @@ defmodule Exftp do
 
   @doc """
     Clear current PID/Connection struct
+
+    ## Examples
+
+        iex> Exftp.disconnect(pid)
+        :ok
+
   """
   def disconnect(pid) do
     Connection.close(pid)
@@ -66,23 +77,38 @@ defmodule Exftp do
     Returns {:ok, handle}, or {:error, reason}
   """
   def open(_pid, _remote_path) do
-    # Files.open(pid, remote_path, :read)
+    # File.open(pid, remote_path, :read)
   end
 
   @doc """
     Lists the contents of a directory given a connection a handle or remote path
     Returns {:ok, [Filename]}, or {:error, reason}
+
+    ## Examples
+
+        iex> Exftp.ls(pid)
+        [
+          %{name: "directory", type: :directory},
+          %{name: "filename.ext", type: :file}
+        ]
+
   """
   def ls(pid) do
-    Files.list_files(pid)
+    File.list_files(pid)
   end
 
   def ls(pid, remote_path) do
-    Files.list_files(pid, remote_path)
+    File.list_files(pid, remote_path)
   end
 
   @doc """
     Change current working directory
+
+    ## Examples
+
+        iex> Exftp.cd(pid, "directory")
+        :ok
+
   """
   def cd(pid, remote_path) do
     Directory.change_dir(pid, remote_path)
@@ -91,6 +117,12 @@ defmodule Exftp do
   @doc """
     Get current working directory
     Returns
+
+    ## Examples
+
+        iex> Exftp.pwd(pid)
+        "/directory"
+
   """
   def pwd(pid) do
     Directory.working_dir(pid)
@@ -104,21 +136,23 @@ defmodule Exftp do
     Directory.make_dir(pid, remote_path)
   end
 
-  # def lstat(pid, remote_path) do
-  #   Files.file_info(pid, remote_path)
-  # end
-  #
-  # def rm(pid, file) do
-  #   Files.remove_file(pid, file)
-  # end
-  #
+  @doc """
+    Remove remote file
+  """
+  def rm(pid, file) do
+    File.remove_file(pid, file)
+  end
+
   # def rm_dir(pid, remote_path) do
-  #   Files.remove_directory(pid, remote_path)
+  #   Directory.remove_directory(pid, remote_path)
   # end
-  #
-  # def mv(pid, old_name, new_name) do
-  #   Files.move(pid, old_name, new_name)
-  # end
+
+  @doc """
+    Change name of remote file
+  """
+  def mv(pid, old_name, new_name) do
+    File.move(pid, old_name, new_name)
+  end
 
   @doc """
     Download a file given the connection and remote_path

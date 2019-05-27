@@ -1,4 +1,4 @@
-defmodule Exftp.Files do
+defmodule Exftp.File do
   @moduledoc ~S"""
   Manage files on remote host.
   """
@@ -72,5 +72,17 @@ defmodule Exftp.Files do
     result = :ftp.send_bin(pid, binary, Helper.to_chlist(path))
     :ftp.type(pid, :ascii)
     result
+  end
+
+  @doc """
+    Rename a file to remote host
+    will return :ok or {:error, reason}
+  """
+  def move({:ftp, pid}, old_name, new_name) do
+    :ftp.rename(pid, Helper.to_chlist(old_name), Helper.to_chlist(new_name))
+  end
+
+  def remove_file({:ftp, pid}, filename) do
+    :ftp.delete(pid, Helper.to_chlist(filename))
   end
 end
