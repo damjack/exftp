@@ -1,6 +1,6 @@
 # Exftp
 
-**TODO: Add description**
+Client FTP/SFTP to transferring and managing files through remote server
 
 ## Installation
 
@@ -15,10 +15,18 @@ def deps do
 end
 ```
 
+Ensure `exftp` is started before your application:
+
+```elixir
+def application do
+  [applications: [:exftp]]
+end
+```
+
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/exftp](https://hexdocs.pm/exftp).
 
 ## License
 
-This project is MIT licensed. Please see the `LICENSE.md` file for more details.
+This project is MIT licensed. Please see the [LICENSE](LICENSE.md) file for more details.
