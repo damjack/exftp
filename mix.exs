@@ -48,7 +48,7 @@ defmodule Exftp.MixProject do
       groups_for_modules: [
         Exftp,
         Exftp.Connection,
-        Exftp.Files,
+        Exftp.File,
         Exftp.Directory,
         Exftp.Helper,
         Exftp.Error
