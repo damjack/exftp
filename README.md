@@ -1,6 +1,6 @@
 # Exftp
 
-Client FTP/SFTP to transferring and managing files through remote server
+Client FTP to transferring and managing files through remote server
 
 ## Installation
 
