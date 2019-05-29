@@ -11,7 +11,7 @@ defmodule Exftp.Error do
     %{
       ehost:
         "Host is not found, FTP server is not found, or connection is rejected by FTP server.",
-      eacces: "Error access SFTP server",
+      eacces: "Error access FTP server",
       eclosed: "The session is closed.",
       closed: "The session is closed.",
       econn: "Connection to the remote server is prematurely closed.",

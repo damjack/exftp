@@ -24,17 +24,6 @@ defmodule Exftp.Connection do
     end
   end
 
-  defp handle_open([mode: :sftp], host, opts) do
-    own_keys = [:port, :mode]
-    ssh_opts = opts |> Enum.filter(fn {k, _} -> not (k in own_keys) end)
-    :ssh.start()
-
-    case :ssh_sftp.start_channel(host, ssh_opts) do
-      {:ok, channel_pid, connection_ref} -> {:sftp, channel_pid, connection_ref}
-      e -> Helper.handle_error(e)
-    end
-  end
-
   @doc """
   Open connection to ftp by passing hostname, user and password.
   Returns the pid that has to be passed to execute commands on that connection
@@ -51,11 +40,6 @@ defmodule Exftp.Connection do
   @doc """
   close the connection
   """
-  def close({:sftp, channel, connection}) do
-    :ok = :ssh_sftp.stop_channel(channel)
-    :ok = :ssh.close(connection)
-  end
-
   def close({:ftp, pid}) do
     :inets.stop(:ftpc, pid)
   end

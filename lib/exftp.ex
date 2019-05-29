@@ -1,6 +1,6 @@
 defmodule Exftp do
   @moduledoc ~S"""
-  Client FTP/SFTP to transferring and managing files through remote server
+  Client FTP to transferring and managing files through remote server
 
   ## Connection
 
@@ -13,19 +13,8 @@ defmodule Exftp do
       iex> Exftp.connect("ftp.speedtest.net")
       {:ftp, #PID<0.215.0>}
 
-  ## Connect through SFTP
-
-      iex> Exftp.connect("sftp.speedtest.net", {mode: :sftp})
-      {:sftp, #PID<0.215.0>}
-
   The `connect/2` function accept second parameter with custom data for port,
-  username, password and mode.
-
-  ## Examples
-
-      iex> Exftp.connect("ftp.speedtest.net", {mode: :sftp})
-      {:sftp, #PID<0.215.0>}
-
+  username, password.
   """
 
   alias Exftp.{
@@ -163,7 +152,7 @@ defmodule Exftp do
   end
 
   @doc """
-    Uploads data to a remote path via SFTP
+    Uploads data to a remote path via FTP
     Returns :ok, or {:error, reason}
   """
   def put(pid, remote_path, file_handle) do

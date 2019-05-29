@@ -1,7 +1,7 @@
 defmodule Exftp.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.1.1"
 
   def project do
     [
@@ -9,7 +9,7 @@ defmodule Exftp.MixProject do
       version: @version,
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
-      description: "A simple FTP/SFTP Elixir library",
+      description: "A simple FTP Elixir library",
       deps: deps(),
       package: package(),
       # Docs
@@ -21,7 +21,7 @@ defmodule Exftp.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [extra_applications: [
-      :logger, :ssh, :public_key, :crypto
+      :logger, :crypto
     ]]
   end
 
